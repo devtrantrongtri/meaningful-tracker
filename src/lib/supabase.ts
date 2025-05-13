@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js"
-import type { LogEntry, User } from "./types"
+import type { LogEntry, User, MoodType, WorkType, EnergyLevel, MeaningLevel } from "./types"
 
 // Sử dụng biến môi trường từ Supabase
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ""
@@ -55,7 +55,7 @@ export async function getCurrentUser() {
     const { data: userData, error } = await supabase
       .from("users")
       .select("*")
-      .eq("email", authUser.email)
+      .eq("email", authUser.email || "")
       .single()
 
     if (error) {
@@ -129,7 +129,19 @@ export async function getLogs() {
 
     if (error) throw error
 
-    return (data || []) as LogEntry[]
+    return (data || []).map(log => ({
+      id: log.id,
+      title: log.title,
+      description: log.description,
+      mood: log.mood as MoodType,
+      work_type: log.work_type as WorkType,
+      energy_level: log.energy_level as EnergyLevel,
+      meaning_level: log.meaning_level as MeaningLevel,
+      date: log.date,
+      user_id: log.user_id,
+      created_at: log.created_at,
+      updated_at: log.updated_at,
+    })) as LogEntry[]
   } catch (error) {
     console.error("Error getting logs:", error)
     return []
@@ -150,7 +162,19 @@ export async function getLogById(id: string) {
 
     if (error) throw error
 
-    return data as LogEntry
+    return {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      mood: data.mood as MoodType,
+      work_type: data.work_type as WorkType,
+      energy_level: data.energy_level as EnergyLevel,
+      meaning_level: data.meaning_level as MeaningLevel,
+      date: data.date,
+      user_id: data.user_id,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+    } as LogEntry
   } catch (error) {
     console.error("Error getting log:", error)
     return null
@@ -178,7 +202,19 @@ export async function createLog(log: Omit<LogEntry, "id" | "created_at" | "updat
 
     if (error) throw error
 
-    return data[0] as LogEntry
+    return {
+      id: data[0].id,
+      title: data[0].title,
+      description: data[0].description,
+      mood: data[0].mood as MoodType,
+      work_type: data[0].work_type as WorkType,
+      energy_level: data[0].energy_level as EnergyLevel,
+      meaning_level: data[0].meaning_level as MeaningLevel,
+      date: data[0].date,
+      user_id: data[0].user_id,
+      created_at: data[0].created_at,
+      updated_at: data[0].updated_at,
+    } as LogEntry
   } catch (error) {
     console.error("Error creating log:", error)
     throw error
@@ -202,7 +238,19 @@ export async function updateLog(id: string, log: Partial<LogEntry>) {
 
     if (error) throw error
 
-    return data[0] as LogEntry
+    return {
+      id: data[0].id,
+      title: data[0].title,
+      description: data[0].description,
+      mood: data[0].mood as MoodType,
+      work_type: data[0].work_type as WorkType,
+      energy_level: data[0].energy_level as EnergyLevel,
+      meaning_level: data[0].meaning_level as MeaningLevel,
+      date: data[0].date,
+      user_id: data[0].user_id,
+      created_at: data[0].created_at,
+      updated_at: data[0].updated_at,
+    } as LogEntry
   } catch (error) {
     console.error("Error updating log:", error)
     throw error
