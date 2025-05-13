@@ -10,21 +10,20 @@ import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
+import { getCurrentUser } from "@/lib/supabase"
 
 export function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
   const { t } = useLanguage()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function getUser() {
       try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        setUser(user)
+        const userData = await getCurrentUser()
+        setUser(userData)
       } catch (error) {
         console.error("Error getting user:", error)
       } finally {
@@ -34,8 +33,13 @@ export function Navbar() {
 
     getUser()
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_OUT") {
+        setUser(null)
+      } else if (session?.user) {
+        const userData = await getCurrentUser()
+        setUser(userData)
+      }
     })
 
     return () => {
