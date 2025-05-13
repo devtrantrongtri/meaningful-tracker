@@ -53,65 +53,69 @@ export default function Home() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
-        <Card className="p-6 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-primary/20">
+        <Card className="p-10  overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-primary/20">
           <CardContent className="p-0">
-            <div className="relative h-[300px] border-b border-l rounded-md bg-gradient-to-br from-background/50 to-background">
+            <div className="relative h-[500px] pt-12 pb-12 px-12 border-b border-l rounded-md bg-gradient-to-br from-background/50 to-background">
+              {/* Background grid */}
+              <div className="absolute inset-0 grid grid-cols-4 grid-rows-4">
+                {Array.from({ length: 16 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="border border-border/20"
+                  />
+                ))}
+              </div>
+
               {/* Gradient backgrounds for quadrants */}
-              <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-red-500/10 dark:bg-red-500/20 rounded-tl-md"></div>
-              <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-green-500/10 dark:bg-green-500/20 rounded-tr-md"></div>
-              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-orange-500/10 dark:bg-orange-500/20 rounded-bl-md"></div>
-              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-blue-500/10 dark:bg-blue-500/20 rounded-br-md"></div>
+              <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-red-500/5 dark:bg-red-500/10 rounded-tl-md"></div>
+              <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-green-500/5 dark:bg-green-500/10 rounded-tr-md"></div>
+              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-orange-500/5 dark:bg-orange-500/10 rounded-bl-md"></div>
+              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-blue-500/5 dark:bg-blue-500/10 rounded-br-md"></div>
 
               {/* Grid lines */}
               <div className="absolute top-1/2 left-0 w-full h-px bg-muted-foreground/20"></div>
               <div className="absolute top-0 left-1/2 w-px h-full bg-muted-foreground/20"></div>
 
               {/* Axis labels with improved styling */}
-              <div className="absolute bottom-2 left-0 w-full text-center text-xs font-medium text-muted-foreground">
-                <span className="px-2 py-1 rounded-full bg-background/80 backdrop-blur-sm shadow-sm">
+              <div className="absolute -bottom-8 left-2 text-xs font-medium text-muted-foreground">
+                <span className="px-2 py-1 rounded-md bg-background/80 backdrop-blur-sm shadow-sm">
                   {t("meaningLevel.1")}
                 </span>
               </div>
-              <div className="absolute bottom-2 right-0 w-full text-center text-xs font-medium text-muted-foreground">
-                <span className="px-2 py-1 rounded-full bg-background/80 backdrop-blur-sm shadow-sm">
+              <div className="absolute -bottom-8 right-2 text-xs font-medium text-muted-foreground">
+                <span className="px-2 py-1 rounded-md bg-background/80 backdrop-blur-sm shadow-sm">
                   {t("meaningLevel.5")}
                 </span>
               </div>
-              <div
-                className="absolute top-0 left-0 h-full text-xs font-medium text-muted-foreground flex items-center"
-                style={{ transform: "rotate(-90deg)", transformOrigin: "left center", marginLeft: "10px" }}
-              >
-                <span className="px-2 py-1 rounded-full bg-background/80 backdrop-blur-sm shadow-sm">
+              <div className="absolute -top-8 right-2 text-xs font-medium text-muted-foreground">
+                <span className="px-2 py-1 rounded-md bg-background/80 backdrop-blur-sm shadow-sm">
                   {t("energyLevel.5")}
                 </span>
               </div>
-              <div
-                className="absolute bottom-0 left-0 h-full text-xs font-medium text-muted-foreground flex items-center"
-                style={{ transform: "rotate(-90deg)", transformOrigin: "left center", marginLeft: "10px" }}
-              >
-                <span className="px-2 py-1 rounded-full bg-background/80 backdrop-blur-sm shadow-sm">
+              <div className="absolute -top-8 left-2 text-xs font-medium text-muted-foreground">
+                <span className="px-2 py-1 rounded-md bg-background/80 backdrop-blur-sm shadow-sm">
                   {t("energyLevel.1")}
                 </span>
               </div>
 
-              {/* Quadrant labels with improved styling */}
-              <div className="absolute top-6 left-6 text-xs font-bold">
-                <span className="px-2 py-1 rounded-md bg-red-500/20 text-red-600 dark:text-red-400 shadow-sm">
+              {/* Quadrant labels */}
+              <div className="absolute top-3 left-3 text-xs font-bold">
+                <span className="px-2 py-1 rounded-md bg-red-500/10 text-red-500 dark:text-red-400 shadow-sm">
                   {t("dashboard.highEnergyLowMeaning")}
                 </span>
               </div>
-              <div className="absolute top-6 right-6 text-xs font-bold">
-                <span className="px-2 py-1 rounded-md bg-green-500/20 text-green-600 dark:text-green-400 shadow-sm">
+              <div className="absolute top-3 right-3 text-xs font-bold">
+                <span className="px-2 py-1 rounded-md bg-green-500/10 text-green-500 dark:text-green-400 shadow-sm">
                   {t("dashboard.highEnergyHighMeaning")}
                 </span>
               </div>
-              <div className="absolute bottom-6 left-6 text-xs font-bold">
-                <span className="px-2 py-1 rounded-md bg-orange-500/20 text-orange-600 dark:text-orange-400 shadow-sm">
+              <div className="absolute bottom-3  left-3  text-xs font-bold">
+                <span className="px-2 py-1 rounded-md bg-orange-500/10 text-orange-500 dark:text-orange-400 shadow-sm">
                   {t("dashboard.lowEnergyLowMeaning")}
                 </span>
               </div>
-              <div className="absolute bottom-6 right-6 text-xs font-bold">
-                <span className="px-2 py-1 rounded-md bg-blue-500/20 text-blue-600 dark:text-blue-400 shadow-sm">
+              <div className="absolute bottom-3 right-3  text-xs font-bold">
+                <span className="px-2 py-1 rounded-md bg-blue-500/10 text-blue-500 dark:text-blue-400 shadow-sm">
                   {t("dashboard.lowEnergyHighMeaning")}
                 </span>
               </div>
@@ -120,7 +124,7 @@ export default function Home() {
               {sampleMatrixData.map((item, index) => (
                 <motion.div
                   key={index}
-                  className="absolute cursor-pointer"
+                  className="absolute cursor-pointer group"
                   style={{
                     left: `${item.x}%`,
                     top: `${100 - item.y}%`,
@@ -136,25 +140,15 @@ export default function Home() {
                     damping: 20,
                   }}
                   whileHover={{
-                    scale: 1.3,
+                    scale: 1.2,
                     transition: { duration: 0.2 },
                   }}
-                  whileTap={{ scale: 0.9 }}
                 >
-                  <div className="flex flex-col items-center group">
-                    <motion.div
-                      className="text-3xl filter drop-shadow-md"
-                      animate={{ y: [0, -5, 0] }}
-                      transition={{
-                        repeat: Number.POSITIVE_INFINITY,
-                        repeatType: "reverse",
-                        duration: 2,
-                        delay: index * 0.5,
-                      }}
-                    >
+                  <div className="flex flex-col items-center">
+                    <div className="text-3xl bg-background/80 p-2 rounded-full shadow-lg group-hover:shadow-xl transition-shadow">
                       {item.emoji}
-                    </motion.div>
-                    <div className="text-xs max-w-[100px] truncate text-center mt-1 px-2 py-0.5 rounded-full bg-background/80 backdrop-blur-sm opacity-80 group-hover:opacity-100 transition-opacity shadow-sm">
+                    </div>
+                    <div className="text-xs max-w-[100px] truncate text-center mt-1 bg-background/80 px-2 py-1 rounded-md shadow-sm">
                       {item.title}
                     </div>
                   </div>
