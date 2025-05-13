@@ -24,7 +24,10 @@ export interface User {
   id: string
   email: string
   name: string
-  password: string
+  avatar_url?: string
+  provider?: string
+  provider_id?: string
+  email_verified?: boolean
   created_at: string
   updated_at: string
 }

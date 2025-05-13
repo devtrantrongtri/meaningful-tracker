@@ -49,7 +49,12 @@ export async function getCurrentUser() {
       data: { user: authUser },
     } = await supabase.auth.getUser()
 
-    if (!authUser) return null
+    if (!authUser) {
+      console.log("No authenticated user found")
+      return null
+    }
+
+    console.log("Auth user found:", authUser)
 
     // Lấy thông tin chi tiết của user từ database
     const { data: userData, error } = await supabase
@@ -59,49 +64,132 @@ export async function getCurrentUser() {
       .single()
 
     if (error) {
-      console.error("Error getting user data:", error)
+      console.log("Error fetching user data:", error)
+      
+      // Nếu lỗi là do không tìm thấy user, tạo mới user
+      if (error.code === 'PGRST116') {
+        console.log("User not found in database, creating new user...")
+        
+        // Trích xuất thông tin từ user metadata
+        const metadata = authUser.user_metadata || {}
+        const newUserData = {
+          id: authUser.id,
+          email: authUser.email,
+          name: metadata.full_name || metadata.name || authUser.email?.split('@')[0],
+          avatar_url: metadata.avatar_url || metadata.picture,
+          provider: metadata.provider || 'google',
+          provider_id: metadata.provider_id,
+          email_verified: metadata.email_verified || false,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        }
+
+        console.log("Attempting to create user with data:", newUserData)
+
+        // Thử tạo user mới
+        const { data: newUser, error: createError } = await supabase
+          .from("users")
+          .insert([newUserData])
+          .select()
+          .single()
+
+        if (createError) {
+          console.error("Error creating user:", {
+            message: createError.message,
+            code: createError.code,
+            details: createError.details,
+            hint: createError.hint,
+            error: createError,
+            userData: newUserData
+          })
+
+          // Thử tạo lại với service role key nếu cần
+          const supabaseAdmin = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY!,
+            {
+              auth: {
+                autoRefreshToken: false,
+                persistSession: false
+              }
+            }
+          )
+
+          const { data: adminUser, error: adminError } = await supabaseAdmin
+            .from("users")
+            .insert([newUserData])
+            .select()
+            .single()
+
+          if (adminError) {
+            console.error("Error creating user with admin:", {
+              message: adminError.message,
+              code: adminError.code,
+              details: adminError.details,
+              hint: adminError.hint,
+              error: adminError,
+              userData: newUserData
+            })
+            return null
+          }
+
+          return {
+            id: adminUser.id,
+            email: adminUser.email,
+            name: adminUser.name,
+            avatar_url: adminUser.avatar_url,
+            provider: adminUser.provider,
+            provider_id: adminUser.provider_id,
+            email_verified: adminUser.email_verified,
+            created_at: adminUser.created_at,
+            updated_at: adminUser.updated_at,
+          } as User
+        }
+
+        console.log("New user created successfully:", newUser)
+
+        return {
+          id: newUser.id,
+          email: newUser.email,
+          name: newUser.name,
+          avatar_url: newUser.avatar_url,
+          provider: newUser.provider,
+          provider_id: newUser.provider_id,
+          email_verified: newUser.email_verified,
+          created_at: newUser.created_at,
+          updated_at: newUser.updated_at,
+        } as User
+      }
+
+      console.error("Error getting user data:", {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint
+      })
       return null
     }
 
     if (!userData) {
-      // Nếu user chưa có trong database, tạo mới
-      const { data: newUser, error: createError } = await supabase
-        .from("users")
-        .insert([
-          {
-            id: authUser.id,
-            email: authUser.email,
-            name: authUser.user_metadata?.name || authUser.email?.split('@')[0],
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-        ])
-        .select()
-        .single()
-
-      if (createError) {
-        console.error("Error creating user:", createError)
-        return null
-      }
-
-      return {
-        id: newUser.id,
-        email: newUser.email,
-        name: newUser.name,
-        created_at: newUser.created_at,
-        updated_at: newUser.updated_at,
-      } as User
+      console.log("No user data found")
+      return null
     }
+
+    console.log("Existing user found:", userData)
 
     return {
       id: userData.id,
       email: userData.email,
       name: userData.name,
+      avatar_url: userData.avatar_url,
+      provider: userData.provider,
+      provider_id: userData.provider_id,
+      email_verified: userData.email_verified,
       created_at: userData.created_at,
       updated_at: userData.updated_at,
     } as User
   } catch (error) {
-    console.error("Error getting current user:", error)
+    console.error("Unexpected error in getCurrentUser:", error)
     return null
   }
 }
@@ -186,21 +274,33 @@ export async function createLog(log: Omit<LogEntry, "id" | "created_at" | "updat
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error("User not authenticated")
 
+    console.log("Creating log with data:", log)
+
     const now = new Date().toISOString()
+    const logData = {
+      ...log,
+      user_id: user.id,
+      created_at: now,
+      updated_at: now,
+    }
+
+    console.log("Final log data:", logData)
 
     const { data, error } = await supabase
       .from("logs")
-      .insert([
-        {
-          ...log,
-          user_id: user.id,
-          created_at: now,
-          updated_at: now,
-        },
-      ])
+      .insert([logData])
       .select()
 
-    if (error) throw error
+    if (error) {
+      console.error("Error creating log:", error)
+      throw error
+    }
+
+    if (!data || data.length === 0) {
+      throw new Error("Failed to create log: No data returned")
+    }
+
+    console.log("Log created successfully:", data[0])
 
     return {
       id: data[0].id,

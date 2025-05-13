@@ -3,10 +3,15 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
-  const requestUrl = new URL(request.url)
-  const code = requestUrl.searchParams.get('code')
+  try {
+    const requestUrl = new URL(request.url)
+    const code = requestUrl.searchParams.get('code')
 
-  if (code) {
+    if (!code) {
+      console.error("No code provided in callback")
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+
     const cookieStore = cookies()
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -27,11 +32,15 @@ export async function GET(request: Request) {
     )
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
+    if (error) {
+      console.error("Error exchanging code for session:", error)
+      return NextResponse.redirect(new URL('/login', request.url))
     }
-  }
 
-  // Return the user to an error page with some instructions
-  return NextResponse.redirect(new URL('/auth/auth-code-error', request.url))
+    // Redirect to home page after successful authentication
+    return NextResponse.redirect(new URL('/', request.url))
+  } catch (error) {
+    console.error("Error in auth callback:", error)
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
 } 
