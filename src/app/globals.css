@@ -1,4 +1,23 @@
 @import "tailwindcss";
+@import "tailwindcss/preflight";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "tailwindcss/typography";
+@import "tailwindcss/forms";
+@import "tailwindcss/aspect-ratio";
+@import "tailwindcss/line-clamp";
+@import "tailwindcss/typography";
+@import "tailwindcss/scroll-snap";
+@import "tailwindcss/scroll-snap-type";
+@import "tailwindcss/scroll-snap-align";
+@import "tailwindcss/scroll-snap-align";
+@import "tailwindcss/scroll-snap-align";
+@import "tailwindcss/scroll-snap-align";
+@import "tailwindcss/scroll-snap-align";
+@import "tailwindcss/scroll-snap-align";
+@import "tailwindcss/scroll-snap-align";
+
 
 :root {
   --background: #ffffff;
@@ -23,4 +42,411 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 225 30% 22%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 225 30% 22%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 225 30% 22%;
+
+    --primary: 258 64% 41%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 287 43% 46%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 324 77% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 258 64% 41%;
+
+    --radius: 0.75rem;
+
+    --chart-1: 258 64% 41%;
+    --chart-2: 287 43% 46%;
+    --chart-3: 324 77% 60%;
+    --chart-4: 184 60% 82%;
+    --chart-5: 225 30% 22%;
+    --chart-6: 258 64% 61%;
+
+    /* Define highlight color */
+    --highlight: 184 60% 82%;
+    --highlight-foreground: 225 30% 22%;
+  }
+
+  .dark {
+    --background: 225 30% 22%;
+    --foreground: 0 0% 100%;
+
+    --card: 225 30% 22%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 225 30% 22%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 258 64% 41%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 287 43% 46%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 324 77% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 258 64% 41%;
+
+    --chart-1: 258 64% 61%;
+    --chart-2: 287 43% 66%;
+    --chart-3: 324 77% 80%;
+    --chart-4: 184 60% 82%;
+    --chart-5: 0 0% 100%;
+    --chart-6: 258 64% 81%;
+
+    /* Define highlight color for dark mode */
+    --highlight: 184 60% 62%;
+    --highlight-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .bg-highlight {
+    background-color: hsl(var(--highlight));
+  }
+  .text-highlight-foreground {
+    color: hsl(var(--highlight-foreground));
+  }
+}
+
+/* Cải thiện hiệu ứng flip card */
+.flip-card {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.flip-card-inner {
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.flip-card:hover .flip-card-inner,
+.flip-card:focus .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Thêm hiệu ứng gradient cho các nút */
+.gradient-button {
+  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)));
+  background-size: 200% auto;
+  transition: background-position 0.5s ease;
+}
+
+.gradient-button:hover {
+  background-position: right center;
+}
+
+/* Thêm hiệu ứng loading */
+@keyframes pulse-bg {
+  0%,
+  100% {
+    background-opacity: 0.1;
+  }
+  50% {
+    background-opacity: 0.2;
+  }
+}
+
+.pulse-loading {
+  animation: pulse-bg 1.5s infinite;
+}
+
+/* Timeline styles */
+.timeline-container {
+  position: relative;
+}
+
+.timeline-container::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  background-color: hsl(var(--primary));
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.timeline-item::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: hsl(var(--primary));
+  border-radius: 50%;
+  top: 15px;
+  left: 50%;
+  margin-left: -10px;
+  z-index: 1;
+}
+
+.timeline-content {
+  position: relative;
+  width: 45%;
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+  left: 55%;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+  left: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .timeline-container::after {
+    left: 31px;
+  }
+
+  .timeline-item::after {
+    left: 31px;
+    margin-left: 0;
+  }
+
+  .timeline-content {
+    width: calc(100% - 80px);
+    left: 80px !important;
+  }
+}
+
+/* Word cloud styles */
+.word-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.word-cloud-item {
+  margin: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.word-cloud-item:hover {
+  transform: scale(1.1);
+}
+
+/* Matrix styles */
+.matrix-container {
+  position: relative;
+}
+
+.matrix-axis-x {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: hsl(var(--muted-foreground));
+}
+
+.matrix-axis-y {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background-color: hsl(var(--muted-foreground));
+}
+
+.matrix-label-x {
+  position: absolute;
+  bottom: -25px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.matrix-label-y {
+  position: absolute;
+  left: -25px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+/* Language switcher */
+.language-switcher {
+  position: relative;
+  display: inline-block;
+}
+
+.language-switcher-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 10;
+  min-width: 120px;
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+}
+
+.language-switcher:hover .language-switcher-dropdown,
+.language-switcher:focus-within .language-switcher-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Emotion card styles */
+.emotion-card {
+  transition: all 0.3s ease;
+}
+
+.emotion-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.energy-bar {
+  height: 8px;
+  border-radius: 4px;
+  background-color: hsl(var(--muted));
+  overflow: hidden;
+}
+
+.energy-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background-color: hsl(var(--primary));
+}
+
+.meaning-bar {
+  height: 8px;
+  border-radius: 4px;
+  background-color: hsl(var(--muted));
+  overflow: hidden;
+}
+
+.meaning-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background-color: hsl(var(--secondary));
+}
+
+/* Matrix visualization enhancements */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--primary), 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(var(--primary), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--primary), 0);
+  }
+}
+
+.matrix-pulse {
+  animation: pulse 2s infinite;
+}
+
+.matrix-item-hover {
+  transition: all 0.3s ease;
+}
+
+.matrix-item-hover:hover {
+  transform: translateY(-5px) scale(1.05);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+/* Improved scrollbar for the app */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.7);
+}
+
+/* Improved focus styles */
+:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
