@@ -49,9 +49,7 @@ export default function LogsPage() {
     async function fetchLogs() {
       try {
         // Check if user is authenticated first
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
+        const { data: { user } } = await supabase.auth.getUser()
 
         if (!user) {
           setLogs([])
