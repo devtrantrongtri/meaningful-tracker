@@ -39,7 +39,7 @@ export function MobileNav() {
   ]
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t md:hidden">
+    <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t md:hidden">
       <div className="grid h-full grid-cols-5">
         {navItems.map((item) => {
           const Icon = item.icon
@@ -48,7 +48,7 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "inline-flex flex-col items-center justify-center px-5 hover:bg-gray-100 dark:hover:bg-gray-800",
+                "inline-flex flex-col items-center justify-center px-5 hover:bg-accent/50",
                 pathname === item.href ? "text-primary" : "text-muted-foreground",
               )}
             >

@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Meaningful Tracker",
   description: "Track your activities, emotions, and find meaning in what you do",
-    generator: 'v0.dev'
+  generator: 'devT'
 }
 
 export default function RootLayout({
@@ -22,12 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-background text-foreground`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LanguageProvider>
-            <div className="min-h-screen flex flex-col">
+            <div className="min-h-screen flex flex-col bg-background">
               <Navbar />
-              <main className="flex-1 container py-6 md:py-10 pb-20 md:pb-10">{children}</main>
+              <main className="flex-1 container py-6 md:py-10 pb-20 md:pb-10 bg-background">{children}</main>
               <MobileNav />
             </div>
           </LanguageProvider>
